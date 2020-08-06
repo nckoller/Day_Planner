@@ -13,11 +13,17 @@ When you refresh the page the saved events will persist.
 
 ## Tech Stack
 HTML
+
 CSS
+
 JavaScript
+
 Moment.js
+
 Boostrap
+
 jQuery
+
 Font Awesome
 
 ## Credits
