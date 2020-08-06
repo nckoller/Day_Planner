@@ -2,7 +2,7 @@
 var scheduleBlocksBase = [
   {
     hour: "9:00 AM",
-    task: "Eat Donuts",
+    task: "",
   },
   {
     hour: "10:00 AM",
@@ -18,7 +18,7 @@ var scheduleBlocksBase = [
   },
   {
     hour: "1:00 PM",
-    task: "Walk Juice",
+    task: "",
   },
   {
     hour: "2:00 PM",
@@ -30,7 +30,7 @@ var scheduleBlocksBase = [
   },
   {
     hour: "4:00 PM",
-    task: "Play Death Stranding",
+    task: "",
   },
   {
     hour: "5:00 PM",
@@ -48,56 +48,48 @@ function drawPage() {
   scheduleBlocks.forEach((block) => {
     const timeString = block.hour;
     const colorClass = timeEvaluation(timeString);
-    
+
     const taskString = block.task;
     const timeBlockTemplate = `<form class="row time-block"><div class="col-2 hour">${timeString}</div><textarea id="saveButton${iter}TextArea" class="col-9 ${colorClass}">${taskString}</textarea><button id="saveButton${iter}" class="col-1 saveBtn"><i class="far fa-save fa-lg"></i></button></form>`;
     timeBlock += timeBlockTemplate;
     iter++;
-    
   });
 
   $("#container").html(timeBlock);
-    const saveButtonsObj = $(".saveBtn");
-    const saveButtons = Object.values(saveButtonsObj);
-   
-    saveButtons.forEach((button) => {      
-      document.getElementById(button.id).addEventListener("click", saveTasks);
+  const saveButtonsObj = $(".saveBtn");
+  const saveButtons = Object.values(saveButtonsObj);
 
-
-     
-    });
-    
+  saveButtons.forEach((button) => {
+    document.getElementById(button.id).addEventListener("click", saveTasks);
+  });
 }
 function timeEvaluation(timeString) {
- 
- const timeStringParsed = moment(timeString, 'hh:mm A').hours(); 
- 
-let currentTime = moment().hours();
+  const timeStringParsed = moment(timeString, "hh:mm A").hours();
 
- if (timeStringParsed < currentTime) {
-     return 'past';
- } else if (timeStringParsed === currentTime) {
-     return 'present';
- } else if (timeStringParsed > currentTime) {
-     return 'future';
- }
+  let currentTime = moment().hours();
 
+  if (timeStringParsed < currentTime) {
+    return "past";
+  } else if (timeStringParsed === currentTime) {
+    return "present";
+  } else if (timeStringParsed > currentTime) {
+    return "future";
+  }
 }
 
 // SAVE DATA TO LOCAL STORAGE
 function saveTasks(e) {
-
   // get the value of <textarea>
-const taskString = $(`#${e.srcElement.id}TextArea`).val()
-//   save to local storage
-const previousTasks = fetchLocalStorage();
-// modify previousTasks
-const buttonValueNumberString = e.srcElement.id.split('')[10]
-const buttonValueNumber = parseInt(buttonValueNumberString)
+  const taskString = $(`#${e.srcElement.id}TextArea`).val();
+  //   save to local storage
+  const previousTasks = fetchLocalStorage();
+  // modify previousTasks
+  const buttonValueNumberString = e.srcElement.id.split("")[10];
+  const buttonValueNumber = parseInt(buttonValueNumberString);
 
-previousTasks[buttonValueNumber].task = taskString;
+  previousTasks[buttonValueNumber].task = taskString;
 
-    localStorage.setItem("timeBlocks", JSON.stringify(previousTasks));
+  localStorage.setItem("timeBlocks", JSON.stringify(previousTasks));
 }
 
 // DISPLAY LOCAL STORAGE DATA ON SCHEDULE
@@ -113,9 +105,7 @@ function fetchLocalStorage() {
 function getDate() {
   var currentHeaderDate = moment().format("dddd, MMMM Do");
   $("#currentDay").text(currentHeaderDate);
-  
 }
 
 getDate();
 drawPage();
-
