@@ -3,6 +3,7 @@ This planner displays typical business hours and will allow you to add important
 
 ## URL of Application
 <https://nckoller.github.io/Day_Planner/>
+
 ## User Criteria
 When you open the planner the current day is displayed at the top of the calendar.  
 When you scroll down, you are presented with timeblocks for standard business hours.  
