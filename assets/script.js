@@ -50,17 +50,21 @@ function drawPage() {
     const colorClass = timeEvaluation(timeString);
 
     const taskString = block.task;
-    const timeBlockTemplate = `<form class="row time-block"><div class="col-2 hour">${timeString}</div><textarea id="saveButton${iter}TextArea" class="col-9 ${colorClass}">${taskString}</textarea><button id="saveButton${iter}" class="col-1 saveBtn"><i class="far fa-save fa-lg"></i></button></form>`;
+    const timeBlockTemplate = `<form class="row time-block"><div class="col-2 hour">${timeString}</div><textarea id="saveButton${iter}TextArea" class="col-9 ${colorClass}">${taskString}</textarea><button id="saveButton${iter}" dataAttr="saveButton${iter}" class="col-1 saveBtn"><i dataAttr="saveButton${iter}" class="far fa-save fa-lg"></i></button></form>`;
     timeBlock += timeBlockTemplate;
     iter++;
   });
 
   $("#container").html(timeBlock);
-  const saveButtonsObj = $(".saveBtn");
-  const saveButtons = Object.values(saveButtonsObj);
+  const buttonCollection = document.getElementsByClassName("saveBtn");
+  var saveButtons = Array.prototype.slice.call(buttonCollection);
+  // console.log("saveButtons>>", saveButtons);
 
   saveButtons.forEach((button) => {
-    document.getElementById(button.id).addEventListener("click", saveTasks);
+    if (typeof button === "object") {
+      // console.log("buttons might work", button);
+      document.getElementById(button.id).addEventListener("click", saveTasks);
+    }
   });
 }
 function timeEvaluation(timeString) {
@@ -77,14 +81,30 @@ function timeEvaluation(timeString) {
   }
 }
 
+// function saveButtonClickEvent() {
+//   const saveButtonsObj = $(".saveBtn");
+//   const saveButtons = Object.values(saveButtonsObj);
+
+//   saveButtons.forEach((button) => {
+//     document.getElementById(button.id).addEventListener("click", saveTasks);
+//   });
+// }
+
 // SAVE DATA TO LOCAL STORAGE
 function saveTasks(e) {
+  e.preventDefault();
+  console.log("THIS ONE", e.srcElement.getAttribute("dataAttr"));
   // get the value of <textarea>
-  const taskString = $(`#${e.srcElement.id}TextArea`).val();
+  const taskString = $(
+    `#${e.srcElement.getAttribute("dataAttr")}TextArea`
+  ).val();
+  console.log(taskString);
   //   save to local storage
   const previousTasks = fetchLocalStorage();
   // modify previousTasks
-  const buttonValueNumberString = e.srcElement.id.split("")[10];
+  const buttonValueNumberString = e.srcElement
+    .getAttribute("dataAttr")
+    .split("")[10];
   const buttonValueNumber = parseInt(buttonValueNumberString);
 
   previousTasks[buttonValueNumber].task = taskString;
